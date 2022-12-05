@@ -1,0 +1,70 @@
+from tkinter import *
+from random import randint
+
+# Set up the GUI window
+window = Tk()
+window.title("Blackjack")
+window.geometry("300x200")
+
+# Function to deal a new card
+def deal():
+    # Generate a random card value between 1 and 10
+    card = randint(1, 10)
+
+    # Add the card to the player's hand and update the hand value
+    player_hand.append(card)
+    player_value = sum(player_hand)
+
+    # Check if the player has busted (hand value greater than 21)
+    if player_value > 21:
+        result_text.set("You busted! You lose.")
+    else:
+        # Update the GUI labels with the new hand value and cards
+        player_value_text.set(player_value)
+        player_cards_text.set(player_hand)
+
+# Function to play the dealer's hand
+def play_dealer():
+    # Loop while the dealer's hand value is less than 17
+    while sum(dealer_hand) < 17:
+        # Deal a new card to the dealer
+        card = randint(1, 10)
+        dealer_hand.append(card)
+
+    # Check if the dealer has busted
+    if sum(dealer_hand) > 21:
+        result_text.set("Dealer busted! You win.")
+    else:
+        # Compare the player's hand value to the dealer's hand value
+        player_value = sum(player_hand)
+        dealer_value = sum(dealer_hand)
+        if player_value > dealer_value:
+            result_text.set("You win!")
+        elif player_value == dealer_value:
+            result_text.set("It's a tie.")
+        else:
+            result_text.set("You lose.")
+
+# Initialize the player's and dealer's hands
+player_hand = []
+dealer_hand = []
+
+# Set up the GUI labels and buttons
+result_text = StringVar()
+player_value_text = StringVar()
+player_cards_text = StringVar()
+deal_button = Button(window, text="Deal", command=deal)
+play_button = Button(window, text="Play Dealer", command=play_dealer)
+result_label = Label(window, textvariable=result_text)
+player_value_label = Label(window, textvariable=player_value_text)
+player_cards_label = Label(window, textvariable=player_cards_text)
+
+# Place the GUI widgets in the window
+result_label.pack()
+player_value_label.pack()
+player_cards_label.pack()
+deal_button.pack()
+play_button.pack()
+
+# Start the GUI event loop
+window.mainloop()
